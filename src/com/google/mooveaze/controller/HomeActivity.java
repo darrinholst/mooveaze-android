@@ -1,10 +1,10 @@
-package com.google.moovease.controller;
+package com.google.mooveaze.controller;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
-import com.google.moovease.R;
+import com.google.mooveaze.R;
 
 public class HomeActivity extends TabActivity {
     public void onCreate(Bundle savedInstanceState) {

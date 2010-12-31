@@ -1,4 +1,4 @@
-package com.google.moovease.model;
+package com.google.mooveaze.model;
 
 import android.content.ContentValues;
 import android.content.Context;

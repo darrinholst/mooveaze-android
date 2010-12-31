@@ -1,4 +1,4 @@
-package com.google.moovease.lib;
+package com.google.mooveaze.lib;
 
 public class Log {
     private static final String TAG = "mooveaze";

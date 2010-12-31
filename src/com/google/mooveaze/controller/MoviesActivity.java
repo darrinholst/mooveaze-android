@@ -1,9 +1,9 @@
-package com.google.moovease.controller;
+package com.google.mooveaze.controller;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.google.moovease.model.Movie;
+import com.google.mooveaze.model.Movie;
 
 public class MoviesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {

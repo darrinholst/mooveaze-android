@@ -1,10 +1,10 @@
-package com.google.moovease.model;
+package com.google.mooveaze.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import com.google.moovease.lib.Log;
+import com.google.mooveaze.lib.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "mooveaze";
