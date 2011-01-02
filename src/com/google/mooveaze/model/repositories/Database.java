@@ -30,18 +30,19 @@ public class Database extends SQLiteOpenHelper {
         super(Mooveaze.getContext(), DB_NAME, null, 1);
     }
 
-    public void createDataBase() {
+    private void createDataBase() {
         if(noDatabaseYet()) {
             getReadableDatabase();
 
             try {
                 copyDataBase();
-                openDataBase();
             }
             catch(IOException e) {
                 throw new Error("Error copying database");
             }
         }
+
+        openDataBase();
     }
 
     private boolean noDatabaseYet() {
@@ -72,7 +73,7 @@ public class Database extends SQLiteOpenHelper {
         myInput.close();
     }
 
-    public void openDataBase() {
+    private void openDataBase() {
         theDatabase = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
     }
 

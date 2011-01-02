@@ -9,6 +9,7 @@ import android.widget.SimpleCursorAdapter;
 import com.google.mooveaze.R;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
+import com.google.mooveaze.view.MovieCursorAdapter;
 
 public class MoviesActivity extends ListActivity {
     private static final int PROGRESS_DIALOG = 0;
@@ -16,14 +17,20 @@ public class MoviesActivity extends ListActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showDialog(PROGRESS_DIALOG);
 
-        new SyncTask() {
-            protected void onPostExecute(Integer integer) {
-                if(progress != null) progress.cancel();
-                showMovies();
-            }
-        }.execute();
+        if(false) {
+            showDialog(PROGRESS_DIALOG);
+
+            new SyncTask() {
+                protected void onPostExecute(Integer integer) {
+                    if(progress != null) progress.cancel();
+                    showMovies();
+                }
+            }.execute();
+        }
+        else {
+            showMovies();
+        }
     }
 
     private void showMovies() {
@@ -32,10 +39,19 @@ public class MoviesActivity extends ListActivity {
         Cursor cursor = new MovieRepository().all();
         startManagingCursor(cursor);
 
-        String[] columns = new String[]{MovieRepository.Columns.NAME};
-        int[] to = new int[]{R.id.movie_name};
+        String[] columns = new String[]{
+                MovieRepository.Columns.NAME,
+                MovieRepository.Columns.RELEASED,
+                MovieRepository.Columns.RATING
+        };
 
-        this.setListAdapter(new SimpleCursorAdapter(this, R.layout.movie, cursor, columns, to));
+        int[] to = new int[]{
+                R.id.movie_name,
+                R.id.movie_released,
+                R.id.movie_rating
+        };
+
+        this.setListAdapter(new MovieCursorAdapter(this, R.layout.movie, cursor, columns, to));
     }
 
     protected Dialog onCreateDialog(int id) {

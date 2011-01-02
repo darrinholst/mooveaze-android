@@ -12,14 +12,6 @@ public class GenreMappingRepository extends BaseRepository {
         public static final String TITLE_ID = "title_id";
     }
 
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            Columns.GENRE_ID + " INTEGER," +
-            Columns.TITLE_ID + " INTEGER," +
-            "PRIMARY KEY (" + Columns.GENRE_ID + ", " + Columns.TITLE_ID + ")" +
-            ")";
-
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-
     public void add(GenreMapping mapping) {
         ContentValues values = new ContentValues();
         values.put(Columns.GENRE_ID, mapping.getGenreId());

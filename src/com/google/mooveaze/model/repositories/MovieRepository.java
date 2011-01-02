@@ -20,20 +20,6 @@ public class MovieRepository extends BaseRepository {
         public static final String IMAGE = "image";
     }
 
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            Columns._ID + " INTEGER PRIMARY KEY," +
-            Columns.NAME + " TEXT," +
-            Columns.RELEASED + " INTEGER," +
-            Columns.RATING + " TEXT, " +
-            Columns.ACTORS + " TEXT," +
-            Columns.DESCRIPTION + " TEXT," +
-            Columns.FORMAT + " INTEGER," +
-            Columns.RUNNING_TIME + " TEXT," +
-            Columns.IMAGE + " TEXT"
-            + ")";
-
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-
     public boolean contains(Movie movie) {
         Cursor cursor = database.rawQuery("select count(*) from " + TABLE_NAME + " where " + Columns._ID + " = " + movie.getId(), new String[]{});
         cursor.moveToNext();
