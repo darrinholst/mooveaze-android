@@ -2,13 +2,14 @@ package com.google.mooveaze.view;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
-import com.google.mooveaze.lib.Log;
 import com.google.mooveaze.model.repositories.MovieRepository;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,9 @@ public class MovieCursorAdapter extends SimpleCursorAdapter {
     }
 
     public void bindView(View view, Context context, Cursor cursor) {
+        ImageView imageView = (ImageView) view.findViewById(R.id.movie_image);
+//        imageView.setImageURI(Uri.parse("http://images.redbox.com/Images/Thumbnails/JerryMaguire_2365.jpg"));
+
         int nameIndex = cursor.getColumnIndex(MovieRepository.Columns.NAME);
         ((TextView) view.findViewById(R.id.movie_name)).setText(cursor.getString(nameIndex));
 
