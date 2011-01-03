@@ -42,13 +42,15 @@ public class MoviesActivity extends ListActivity {
         String[] columns = new String[]{
                 MovieRepository.Columns.NAME,
                 MovieRepository.Columns.RELEASED,
-                MovieRepository.Columns.RATING
+                MovieRepository.Columns.RATING,
+                MovieRepository.Columns.IMAGE
         };
 
         int[] to = new int[]{
                 R.id.movie_name,
                 R.id.movie_released,
-                R.id.movie_rating
+                R.id.movie_rating,
+                R.id.movie_image
         };
 
         this.setListAdapter(new MovieCursorAdapter(this, R.layout.movie, cursor, columns, to));
