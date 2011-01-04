@@ -1,5 +1,7 @@
 package com.google.mooveaze.model;
 
+import android.database.Cursor;
+import com.google.mooveaze.model.repositories.MovieRepository;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -27,6 +29,20 @@ public class Movie extends Title {
         movie.setFormat(json.getString("fmt"));
         movie.setReleaseDays(json.getInt("releaseDays"));
         movie.setRating(json.getString("rating"));
+        return movie;
+    }
+
+    public static Movie fromCursor(Cursor cursor) throws Exception {
+        Movie movie = new Movie();
+
+        movie.setId(cursor.getInt(cursor.getColumnIndex(MovieRepository.Columns._ID)));
+        movie.setName(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.NAME)));
+        movie.setReleased(parseDate(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RELEASED))));
+        movie.setImage(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.IMAGE)));
+        movie.setRating(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RATING)));
+        movie.setActors(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.ACTORS)));
+        movie.setDescription(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.DESCRIPTION)));
+
         return movie;
     }
 

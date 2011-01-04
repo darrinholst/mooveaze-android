@@ -15,6 +15,12 @@
                   android:layout_toRightOf="@id/movie_image">
 
         <TextView
+                android:id="@+id/movie_id"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="invisible"/>
+
+        <TextView
                 android:id="@+id/movie_name"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"

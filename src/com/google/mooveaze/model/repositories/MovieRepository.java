@@ -10,6 +10,7 @@ public class MovieRepository extends BaseRepository {
     private static final String TABLE_NAME = "movies";
 
     public static class Columns implements BaseColumns {
+
         public static final String NAME = "name";
         public static final String RELEASED = "released";
         public static final String RATING = "rating";
@@ -42,5 +43,21 @@ public class MovieRepository extends BaseRepository {
 
     public Cursor all() {
         return database.rawQuery("select * from " + TABLE_NAME + " order by " + Columns.RELEASED + " desc", new String[0]);
+    }
+
+    public Movie get(String movieId) {
+        Cursor cursor = database.rawQuery("select * from " + TABLE_NAME + " where " + Columns._ID + " = ?", new String[]{movieId});
+        cursor.moveToNext();
+        Movie movie = null;
+
+        try {
+            movie = Movie.fromCursor(cursor);
+        }
+        catch(Exception e) {
+            Log.error(e);
+        }
+
+        cursor.close();
+        return movie;
     }
 }

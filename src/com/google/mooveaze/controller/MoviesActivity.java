@@ -1,29 +1,31 @@
 package com.google.mooveaze.controller;
 
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import com.google.mooveaze.R;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
 import com.google.mooveaze.view.MovieBinder;
 
-public class MoviesActivity extends ListActivity {
-    private static final int PROGRESS_DIALOG = 0;
+public class MoviesActivity extends ListActivity implements AdapterView.OnItemClickListener {
     private ProgressDialog progress;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(false) {
-            showDialog(PROGRESS_DIALOG);
+            progress = ProgressDialog.show(this, "", "Initial movie sync in progress. Please wait...", true, false);
 
             new SyncTask() {
                 protected void onPostExecute(Integer integer) {
-                    if(progress != null) progress.cancel();
+                    progress.cancel();
                     showMovies();
                 }
             }.execute();
@@ -40,6 +42,7 @@ public class MoviesActivity extends ListActivity {
         startManagingCursor(cursor);
 
         String[] columns = new String[]{
+                MovieRepository.Columns._ID,
                 MovieRepository.Columns.NAME,
                 MovieRepository.Columns.RELEASED,
                 MovieRepository.Columns.RATING,
@@ -47,6 +50,7 @@ public class MoviesActivity extends ListActivity {
         };
 
         int[] to = new int[]{
+                R.id.movie_id,
                 R.id.movie_name,
                 R.id.movie_released,
                 R.id.movie_rating,
@@ -55,19 +59,14 @@ public class MoviesActivity extends ListActivity {
 
         SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this, R.layout.movie, cursor, columns, to);
         cursorAdapter.setViewBinder(new MovieBinder());
-        this.setListAdapter(cursorAdapter);
+        setListAdapter(cursorAdapter);
+        getListView().setOnItemClickListener(this);
     }
 
-    protected Dialog onCreateDialog(int id) {
-        if(id == PROGRESS_DIALOG) {
-            progress = new ProgressDialog(this);
-            progress.setCancelable(false);
-            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progress.setIndeterminate(true);
-            progress.setMessage("Initial movie sync in progress. Please wait...");
-            return progress;
-        }
-
-        return null;
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        String movieId = ((TextView) view.findViewById(R.id.movie_id)).getText().toString();
+        Intent intent = new Intent(this, MovieActivity.class);
+        intent.putExtra("movieId", movieId);
+        startActivity(intent);
     }
 }
