@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
+import com.google.mooveaze.lib.Log;
 import com.google.mooveaze.model.repositories.ImageRepository;
 
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
+    private ImageRepository imageRepository = new ImageRepository();
     private Map<View, AsyncTask<String, Void, Bitmap>> imageThreads = new HashMap<View, AsyncTask<String, Void, Bitmap>>();
 
     public boolean setViewValue(View view, Cursor cursor, int i) {
@@ -50,7 +52,7 @@ public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
         AsyncTask<String, Void, Bitmap> newTask = new AsyncTask<String, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(String... strings) {
-                return new ImageRepository().get(strings[0]);
+                return imageRepository.get(strings[0]);
             }
 
             @Override
@@ -62,5 +64,4 @@ public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
         newTask.execute(image);
         imageThreads.put(view, newTask);
     }
-
 }

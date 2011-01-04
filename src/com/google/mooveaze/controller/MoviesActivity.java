@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
+import com.google.mooveaze.lib.Log;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
 import com.google.mooveaze.view.MovieBinder;
@@ -38,7 +39,12 @@ public class MoviesActivity extends ListActivity implements AdapterView.OnItemCl
     private void showMovies() {
         setContentView(R.layout.movies);
 
+        long duration = System.currentTimeMillis();
         Cursor cursor = new MovieRepository().all();
+        duration = System.currentTimeMillis() - duration;
+        Log.debug(duration + " milliseconds to retrieve cursor");
+
+
         startManagingCursor(cursor);
 
         String[] columns = new String[]{
@@ -59,7 +65,10 @@ public class MoviesActivity extends ListActivity implements AdapterView.OnItemCl
 
         SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this, R.layout.movie, cursor, columns, to);
         cursorAdapter.setViewBinder(new MovieBinder());
+        duration = System.currentTimeMillis();
         setListAdapter(cursorAdapter);
+        duration = System.currentTimeMillis() - duration;
+        Log.debug(duration + " milliseconds to set adapter");
         getListView().setOnItemClickListener(this);
     }
 

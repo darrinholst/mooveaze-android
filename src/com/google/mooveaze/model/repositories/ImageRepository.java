@@ -10,15 +10,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageRepository {
     private final static String IMAGE_URL = "http://images.redbox.com/Images/Thumbnails/";
+    private Map<String, Bitmap> cache = new HashMap<String, Bitmap>();
 
     public Bitmap get(String name) {
         Bitmap image = null;
 
         try {
-            image = getImageFromDisk(name);
+            image = cache.get(name);
+
+            if(image == null) {
+                image = getImageFromDisk(name);
+            }
 
             if(image == null) {
                 image = getImageFromWeb(name);
@@ -35,6 +42,7 @@ public class ImageRepository {
         URL url = new URL(IMAGE_URL + name);
         URLConnection connection = url.openConnection();
         Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+        cache.put(name, bitmap);
         writeImageToDisk(name, bitmap);
         return bitmap;
     }
@@ -78,6 +86,7 @@ public class ImageRepository {
             FileInputStream fileInputStream = new FileInputStream(file);
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
             fileInputStream.close();
+            cache.put(name, bitmap);
             return bitmap;
         }
 
