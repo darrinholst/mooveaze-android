@@ -4,12 +4,22 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import com.google.mooveaze.R;
+import com.google.mooveaze.lib.ImageTask;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
-import com.google.mooveaze.view.MovieCursorAdapter;
+import com.google.mooveaze.view.MovieBinder;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MoviesActivity extends ListActivity {
     private static final int PROGRESS_DIALOG = 0;
@@ -53,7 +63,9 @@ public class MoviesActivity extends ListActivity {
                 R.id.movie_image
         };
 
-        this.setListAdapter(new MovieCursorAdapter(this, R.layout.movie, cursor, columns, to));
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(this, R.layout.movie, cursor, columns, to);
+        cursorAdapter.setViewBinder(new MovieBinder());
+        this.setListAdapter(cursorAdapter);
     }
 
     protected Dialog onCreateDialog(int id) {
