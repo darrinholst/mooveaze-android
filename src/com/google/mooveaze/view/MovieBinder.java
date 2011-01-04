@@ -2,12 +2,13 @@ package com.google.mooveaze.view;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
-import com.google.mooveaze.lib.ImageTask;
+import com.google.mooveaze.model.repositories.ImageRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
-    private Map<View, ImageTask> imageThreads = new HashMap<View, ImageTask>();
+    private Map<View, AsyncTask<String, Void, Bitmap>> imageThreads = new HashMap<View, AsyncTask<String, Void, Bitmap>>();
 
     public boolean setViewValue(View view, Cursor cursor, int i) {
         switch(view.getId()) {
@@ -38,9 +39,7 @@ public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
     }
 
     private void bindImage(final ImageView view, final String image) {
-        final String imageUrl = "http://images.redbox.com/Images/Thumbnails/" + image;
-
-        ImageTask currentTask = imageThreads.get(view);
+        AsyncTask<String, Void, Bitmap> currentTask = imageThreads.get(view);
 
         if(currentTask != null) {
             currentTask.cancel(true);
@@ -48,15 +47,20 @@ public class MovieBinder implements SimpleCursorAdapter.ViewBinder {
 
         view.setImageBitmap(null);
 
-        ImageTask imageTask = new ImageTask() {
+        AsyncTask<String, Void, Bitmap> newTask = new AsyncTask<String, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(String... strings) {
+                return new ImageRepository().get(strings[0]);
+            }
+
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 view.setImageBitmap(bitmap);
             }
         };
 
-        imageTask.execute(imageUrl);
-        imageThreads.put(view, imageTask);
+        newTask.execute(image);
+        imageThreads.put(view, newTask);
     }
 
 }

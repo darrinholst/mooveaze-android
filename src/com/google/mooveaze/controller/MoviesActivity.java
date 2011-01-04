@@ -4,22 +4,12 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import com.google.mooveaze.R;
-import com.google.mooveaze.lib.ImageTask;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
 import com.google.mooveaze.view.MovieBinder;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MoviesActivity extends ListActivity {
     private static final int PROGRESS_DIALOG = 0;
