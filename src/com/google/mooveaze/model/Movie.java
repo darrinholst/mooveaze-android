@@ -18,6 +18,7 @@ public class Movie extends Title {
     private String rating;
     private String actors;
     private String description;
+    private String runningTime;
 
     public static Movie fromJson(JSONObject json) throws Exception {
         Movie movie = new Movie();
@@ -42,6 +43,7 @@ public class Movie extends Title {
         movie.setRating(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RATING)));
         movie.setActors(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.ACTORS)));
         movie.setDescription(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.DESCRIPTION)));
+        movie.setRunningTime(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RUNNING_TIME)));
 
         return movie;
     }
@@ -90,6 +92,10 @@ public class Movie extends Title {
         this.description = description;
     }
 
+    public void setRunningTime(String runningTime) {
+        this.runningTime = runningTime;
+    }
+
     public int getId() {
         return id;
     }
@@ -128,5 +134,9 @@ public class Movie extends Title {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getRunningTime() {
+        return runningTime;
     }
 }

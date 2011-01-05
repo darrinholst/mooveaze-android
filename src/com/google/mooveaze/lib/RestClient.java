@@ -1,6 +1,7 @@
 package com.google.mooveaze.lib;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -11,24 +12,10 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 public class RestClient {
-    public final static class Header {
-        private String key;
-        private String value;
+    private HttpClient client;
 
-        public Header(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-    public final static class Response {
-        public int statusCode;
-        public String entity;
-
-        public Response(int statusCode, String entity) {
-            this.statusCode = statusCode;
-            this.entity = entity;
-        }
+    public RestClient() {
+        client = new DefaultHttpClient();
     }
 
     public Response get(String url) {
@@ -45,7 +32,7 @@ public class RestClient {
         }
 
         try {
-            HttpResponse response = new DefaultHttpClient().execute(get);
+            HttpResponse response = client.execute(get);
             InputStream inputStream = response.getEntity().getContent();
             return new Response(response.getStatusLine().getStatusCode(), toString(inputStream));
         }
@@ -66,7 +53,7 @@ public class RestClient {
 
         try {
             post.setEntity(new StringEntity(entity));
-            HttpResponse response = new DefaultHttpClient().execute(post);
+            HttpResponse response = client.execute(post);
             InputStream inputStream = response.getEntity().getContent();
             return new Response(response.getStatusLine().getStatusCode(), toString(inputStream));
         }
@@ -93,5 +80,25 @@ public class RestClient {
         }
 
         return sw.toString();
+    }
+
+    public final static class Header {
+        private String key;
+        private String value;
+
+        public Header(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    public final static class Response {
+        public int statusCode;
+        public String entity;
+
+        public Response(int statusCode, String entity) {
+            this.statusCode = statusCode;
+            this.entity = entity;
+        }
     }
 }

@@ -12,6 +12,7 @@ public class MovieRepository extends BaseRepository {
     public static class Columns implements BaseColumns {
 
         public static final String NAME = "name";
+
         public static final String RELEASED = "released";
         public static final String RATING = "rating";
         public static final String ACTORS = "actors";
@@ -39,6 +40,15 @@ public class MovieRepository extends BaseRepository {
         values.put(Columns.FORMAT, movie.getFormat());
         values.put(Columns.IMAGE, movie.getImage());
         database.insert(TABLE_NAME, null, values);
+    }
+
+    public void update(Movie movie) {
+        Log.debug("updating " + movie.getName());
+        ContentValues values = new ContentValues();
+        values.put(Columns.DESCRIPTION, movie.getDescription());
+        values.put(Columns.ACTORS, movie.getActors());
+        values.put(Columns.RUNNING_TIME, movie.getRunningTime());
+        database.update(TABLE_NAME, values, Columns._ID + " = ?", new String[]{movie.getId() + ""});
     }
 
     public Cursor all() {
