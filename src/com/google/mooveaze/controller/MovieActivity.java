@@ -66,7 +66,8 @@ public class MovieActivity extends Activity {
             setText(R.id.movie_detail_length, "Running Time: " + movie.getRunningTime());
             setText(R.id.movie_detail_rated, "Rated: " + movie.getRating());
             setText(R.id.movie_detail_starring, "Starring: " + movie.getActors());
-            setText(R.id.movie_detail_description, movie.getDescription());
+            setText(R.id.movie_detail_genres, "Genres: " + movie.getGenres());
+            setText(R.id.movie_detail_description, movie.getDescription().replaceAll("\r", ""));
         }
     }
 

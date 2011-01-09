@@ -71,6 +71,7 @@ public class Redbox2 {
                 movie.setDescription(data.getString("desc"));
                 movie.setActors(join(data.getJSONArray("starring")));
                 movie.setRunningTime(data.getString("len"));
+                movie.setGenres(join(data.getJSONArray("genre")));
             }
         }
         catch(Exception e) {

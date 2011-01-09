@@ -38,7 +38,6 @@ public class SyncTask extends AsyncTask<Void, Integer, Integer> {
     private int addMovies(JSONArray titles) {
         TitleFactory factory = new TitleFactory();
         MovieRepository movieRepository = new MovieRepository();
-        GenreRepository genreRepository = new GenreRepository();
         GenreMappingRepository genreMappingRepository = new GenreMappingRepository();
 
         int moviesAdded = 0;
@@ -50,8 +49,7 @@ public class SyncTask extends AsyncTask<Void, Integer, Integer> {
                 if(movie != null && movie.getReleaseDays() >= 0 && !movieRepository.contains(movie)) {
                     movieRepository.add(movie);
 
-                    for(Integer genreId : movie.getGenres()) {
-                        genreRepository.add(new Genre(genreId, "" + genreId));
+                    for(Integer genreId : movie.getGenresIds()) {
                         genreMappingRepository.add(new GenreMapping(genreId, movie.getId()));
                     }
 

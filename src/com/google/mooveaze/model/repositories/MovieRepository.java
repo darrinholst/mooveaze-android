@@ -20,6 +20,7 @@ public class MovieRepository extends BaseRepository {
         public static final String FORMAT = "format";
         public static final String RUNNING_TIME = "running_time";
         public static final String IMAGE = "image";
+        public static final String GENRES = "genres";
     }
 
     public boolean contains(Movie movie) {
@@ -48,11 +49,12 @@ public class MovieRepository extends BaseRepository {
         values.put(Columns.DESCRIPTION, movie.getDescription());
         values.put(Columns.ACTORS, movie.getActors());
         values.put(Columns.RUNNING_TIME, movie.getRunningTime());
+        values.put(Columns.GENRES, movie.getGenres());
         database.update(TABLE_NAME, values, Columns._ID + " = ?", new String[]{movie.getId() + ""});
     }
 
     public Cursor all() {
-        return database.rawQuery("select * from " + TABLE_NAME + " order by " + Columns.RELEASED + " desc", new String[0]);
+        return database.rawQuery("select * from " + TABLE_NAME + " order by " + Columns.RELEASED + " desc limit 50", new String[0]);
     }
 
     public Movie get(String movieId) {

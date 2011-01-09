@@ -10,7 +10,8 @@ import java.util.List;
 public class Movie extends Title {
     private int id;
     private String name;
-    private List<Integer> genres;
+    private List<Integer> genresIds;
+    private String genres;
     private Date released;
     private String image;
     private String format;
@@ -24,7 +25,7 @@ public class Movie extends Title {
         Movie movie = new Movie();
         movie.setId(json.getInt("ID"));
         movie.setName(json.getString("name"));
-        movie.setGenres(idsFrom(json.getJSONArray("genreIDs")));
+        movie.setGenresIds(idsFrom(json.getJSONArray("genreIDs")));
         movie.setReleased(parseDate(json.getString("release")));
         movie.setImage(json.getString("img"));
         movie.setFormat(json.getString("fmt"));
@@ -60,7 +61,11 @@ public class Movie extends Title {
         this.name = name;
     }
 
-    public void setGenres(List<Integer> genres) {
+    public void setGenresIds(List<Integer> genresIds) {
+        this.genresIds = genresIds;
+    }
+
+    public void setGenres(String genres) {
         this.genres = genres;
     }
 
@@ -104,7 +109,11 @@ public class Movie extends Title {
         return name;
     }
 
-    public List<Integer> getGenres() {
+    public List<Integer> getGenresIds() {
+        return genresIds;
+    }
+
+    public String getGenres() {
         return genres;
     }
 
