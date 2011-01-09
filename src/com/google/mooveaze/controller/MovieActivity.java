@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.mooveaze.R;
-import com.google.mooveaze.lib.Redbox2;
+import com.google.mooveaze.lib.Redbox;
 import com.google.mooveaze.model.Movie;
 import com.google.mooveaze.model.repositories.ImageRepository;
 import com.google.mooveaze.model.repositories.MovieRepository;
@@ -30,7 +30,7 @@ public class MovieActivity extends Activity {
 
             new AsyncTask<Void, Void, Void>() {
                 protected Void doInBackground(Void... voids) {
-                    Redbox2.getInstance().addMovieDetails(movie);
+                    Redbox.getInstance().addMovieDetails(movie);
                     return null;
                 }
 
