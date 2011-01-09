@@ -5,12 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
-import com.google.mooveaze.lib.Log;
 import com.google.mooveaze.lib.Redbox;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
@@ -70,5 +71,21 @@ public class MoviesActivity extends ListActivity implements AdapterView.OnItemCl
         Intent intent = new Intent(this, MovieActivity.class);
         intent.putExtra("movieId", movieId);
         startActivity(intent);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.movies, menu);
+        return true;
+    }
+
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.kiosks:
+                startActivity(new Intent(this, KiosksActivity.class));
+                return true;
+        }
+
+        return false;
     }
 }
