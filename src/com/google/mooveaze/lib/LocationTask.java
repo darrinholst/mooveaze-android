@@ -1,15 +1,22 @@
 package com.google.mooveaze.lib;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import com.google.mooveaze.Mooveaze;
 
 public class LocationTask extends AsyncTask<Void, Void, Location> {
     protected Location doInBackground(Void... voids) {
-        try {
-            Thread.sleep(2000);
-        }
-        catch(InterruptedException e) {
+        LocationManager locationService = (LocationManager) Mooveaze.getContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationService.getBestProvider(criteria, true);
+
+        if(provider == null) {
+            return null;
         }
 
-        return new Location("41.836828", "-94.092407");
+        android.location.Location location = locationService.getLastKnownLocation(provider);
+        return new Location(location.getLatitude(), location.getLongitude());
     }
 }

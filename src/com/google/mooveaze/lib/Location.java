@@ -1,10 +1,10 @@
 package com.google.mooveaze.lib;
 
 public class Location {
-    public String lat;
-    public String lng;
+    public double lat;
+    public double lng;
 
-    public Location(String lat, String lng) {
+    public Location(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
     }

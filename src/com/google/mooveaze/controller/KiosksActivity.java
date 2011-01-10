@@ -25,18 +25,27 @@ public class KiosksActivity extends Activity {
 
             new LocationTask() {
                 protected void onPostExecute(final Location location) {
-                    progress.setMessage("Finding kiosks...");
+                    findKiosks(location);
+                }
+            }.execute();
+        }
+    }
 
-                    new AsyncTask<Void, Void, List<Kiosk>>() {
-                        protected List<Kiosk> doInBackground(Void... voids) {
-                            return Redbox.getInstance().findKiosksAt(location);
-                        }
+    private void findKiosks(final Location location) {
+        if(location == null) {
+            progress.cancel();
+        }
+        else {
+            progress.setMessage("Finding kiosks...");
 
-                        protected void onPostExecute(List<Kiosk> kiosks) {
-                            progress.cancel();
-                            showKiosks(kiosks);
-                        }
-                    }.execute();
+            new AsyncTask<Void, Void, List<Kiosk>>() {
+                protected List<Kiosk> doInBackground(Void... voids) {
+                    return Redbox.getInstance().findKiosksAt(location);
+                }
+
+                protected void onPostExecute(List<Kiosk> kiosks) {
+                    progress.cancel();
+                    showKiosks(kiosks);
                 }
             }.execute();
         }
