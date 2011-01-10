@@ -1,9 +1,12 @@
 package com.google.mooveaze.lib;
 
+import com.google.mooveaze.model.Kiosk;
 import com.google.mooveaze.model.Movie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public abstract class RedboxApi {
     protected RestClient client;
@@ -14,7 +17,9 @@ public abstract class RedboxApi {
         this.key = key;
     }
 
-    public abstract void addMovieDetails(Movie movie);
+    protected abstract void addMovieDetails(Movie movie);
+
+    protected abstract List<Kiosk> findKiosksAt(Location location);
 
     protected abstract RestClient.Header[] getPostHeaders();
 
@@ -33,6 +38,7 @@ public abstract class RedboxApi {
         RestClient.Response response = client.post(endpoint, entity.toString(), getPostHeaders());
 
         if(response.statusCode == 200) {
+            Log.debug(response.entity);
             return response.entity;
         }
         else {

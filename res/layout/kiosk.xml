@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/kiosk_id"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="invisible"/>
+
+    <TextView
+            android:id="@+id/kiosk_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="20dip"/>
+
+    <TextView
+            android:id="@+id/kiosk_address"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="16dip"/>
+
+    <RelativeLayout android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+        <TextView
+                android:id="@+id/kiosk_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textSize="16dip"
+                android:layout_alignParentRight="true"/>
+
+        <TextView
+                android:id="@+id/kiosk_city"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textSize="16dip"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/kiosk_distance"/>
+    </RelativeLayout>
+</LinearLayout>

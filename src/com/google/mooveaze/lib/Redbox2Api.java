@@ -1,13 +1,28 @@
 package com.google.mooveaze.lib;
 
+import com.google.mooveaze.model.Kiosk;
 import com.google.mooveaze.model.Movie;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Redbox2Api extends RedboxApi {
     private static final String MOVIE_DETAILS_URL = "http://www.redbox.com/api/Product/GetDetail/";
+    private static final String LOCATE_KIOSKS_URL = "http://www.redbox.com/api/Store/GetStores/";
 
     public Redbox2Api(RestClient client, String key) {
         super(client, key);
+    }
+
+    protected RestClient.Header[] getPostHeaders() {
+        return new RestClient.Header[]{
+                new RestClient.Header("__K", key),
+                new RestClient.Header("X-Requested-With", "XMLHttpRequest"),
+                new RestClient.Header("Content-Type", "application/json")
+        };
     }
 
     public void addMovieDetails(Movie movie) {
@@ -32,12 +47,65 @@ public class Redbox2Api extends RedboxApi {
         }
     }
 
-    protected RestClient.Header[] getPostHeaders() {
-        return new RestClient.Header[]{
-                new RestClient.Header("__K", key),
-                new RestClient.Header("X-Requested-With", "XMLHttpRequest"),
-                new RestClient.Header("Content-Type", "application/json")
-        };
+    protected List<Kiosk> findKiosksAt(Location location) {
+        ArrayList<Kiosk> kiosks = new ArrayList<Kiosk>();
+
+        try {
+            JSONObject json = locationKiosksRequest(location);
+            JSONObject details = post(LOCATE_KIOSKS_URL, json).getJSONObject("d");
+
+            if(details.getBoolean("success")) {
+                parseLocateKiosksResponse(kiosks, details.getJSONArray("data"));
+            }
+        }
+        catch(Exception e) {
+            Log.error(e);
+        }
+
+        return kiosks;
+    }
+
+    private void parseLocateKiosksResponse(ArrayList<Kiosk> kiosks, JSONArray jsonKiosks) throws JSONException {
+        for(int i = 0; i < jsonKiosks.length(); i++) {
+            JSONObject jsonKiosk = jsonKiosks.getJSONObject(i);
+            JSONObject status = jsonKiosk.getJSONObject("status");
+
+            if(status.getBoolean("online")) {
+                Kiosk kiosk = new Kiosk();
+                kiosk.setId(jsonKiosk.getInt("id"));
+
+                JSONObject profile = jsonKiosk.getJSONObject("profile");
+                kiosk.setName(profile.getString("name"));
+                kiosk.setVendor(profile.getString("vendor"));
+                kiosk.setAddress(profile.getString("addr"));
+                kiosk.setCity(profile.getString("city"));
+                kiosk.setState(profile.getString("state"));
+                kiosk.setZip(profile.getString("zip"));
+
+                JSONObject proximity = jsonKiosk.getJSONObject("proximity");
+                kiosk.setDistance(proximity.getDouble("dist"));
+                kiosks.add(kiosk);
+            }
+        }
+    }
+
+    private JSONObject locationKiosksRequest(Location location) throws JSONException {
+        JSONObject json = new JSONObject();
+        JSONObject filters = new JSONObject();
+        JSONObject proximity = new JSONObject();
+        proximity.put("lat", location.lat);
+        proximity.put("lng", location.lng);
+        proximity.put("radius", 50);
+        filters.put("proximity", proximity);
+        json.put("filters", filters);
+        JSONObject resultOptions = new JSONObject();
+        resultOptions.put("max", 50);
+        resultOptions.put("profile", true);
+        resultOptions.put("status", true);
+        resultOptions.put("proximity", true);
+        resultOptions.put("user", true);
+        json.put("resultOptions", resultOptions);
+        return json;
     }
 
 }

@@ -1,7 +1,9 @@
 package com.google.mooveaze.lib;
 
+import com.google.mooveaze.model.Kiosk;
 import com.google.mooveaze.model.Movie;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,10 @@ public class Redbox {
                 throw new RuntimeException("Could not find redbox api key");
             }
         }
+    }
+
+    public List<Kiosk> findKiosksAt(Location location) {
+        return api.findKiosksAt(location);
     }
 
     public void addMovieDetails(Movie movie) {
