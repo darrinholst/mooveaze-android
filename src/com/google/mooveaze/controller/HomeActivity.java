@@ -18,7 +18,7 @@ public class HomeActivity extends TabActivity {
         tabHost.addTab(spec);
 
         intent = new Intent(this, KiosksActivity.class);
-        spec = tabHost.newTabSpec("kiosks").setIndicator("Kioks").setContent(intent);
+        spec = tabHost.newTabSpec("kiosks").setIndicator("Kiosks").setContent(intent);
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(0);

@@ -34,7 +34,7 @@ public class KiosksActivity extends Activity {
 
                         protected void onPostExecute(List<Kiosk> kiosks) {
                             progress.cancel();
-                            showKioks(kiosks);
+                            showKiosks(kiosks);
                         }
                     }.execute();
                 }
@@ -42,7 +42,7 @@ public class KiosksActivity extends Activity {
         }
     }
 
-    private void showKioks(List<Kiosk> kiosks) {
+    private void showKiosks(List<Kiosk> kiosks) {
         setContentView(R.layout.kiosks);
         ListView list = (ListView) findViewById(R.id.kiosks);
         list.setAdapter(new KiosksAdapter(this, kiosks));
