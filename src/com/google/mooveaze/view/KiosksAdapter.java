@@ -36,7 +36,6 @@ public class KiosksAdapter extends ArrayAdapter<Kiosk> {
             NumberFormat format = NumberFormat.getInstance();
             format.setMaximumFractionDigits(1);
             String distance = format.format(kiosk.getDistance());
-
             setText(view, R.id.kiosk_distance, distance);
         }
 

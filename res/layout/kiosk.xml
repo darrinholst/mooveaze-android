@@ -2,13 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="vertical">
-
-    <TextView
-            android:id="@+id/kiosk_id"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="invisible"/>
+              android:orientation="vertical"
+              android:paddingBottom="10px"
+              android:paddingTop="10px">
 
     <TextView
             android:id="@+id/kiosk_name"

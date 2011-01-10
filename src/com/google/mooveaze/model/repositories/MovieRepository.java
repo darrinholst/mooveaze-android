@@ -10,9 +10,7 @@ public class MovieRepository extends BaseRepository {
     private static final String TABLE_NAME = "movies";
 
     public static class Columns implements BaseColumns {
-
         public static final String NAME = "name";
-
         public static final String RELEASED = "released";
         public static final String RATING = "rating";
         public static final String ACTORS = "actors";

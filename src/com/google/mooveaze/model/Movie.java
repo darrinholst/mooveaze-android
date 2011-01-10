@@ -39,7 +39,7 @@ public class Movie extends Title {
 
         movie.setId(cursor.getInt(cursor.getColumnIndex(MovieRepository.Columns._ID)));
         movie.setName(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.NAME)));
-        movie.setReleased(parseDate(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RELEASED))));
+        movie.setReleased(new Date(cursor.getLong(cursor.getColumnIndex(MovieRepository.Columns.RELEASED))));
         movie.setImage(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.IMAGE)));
         movie.setRating(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RATING)));
         movie.setActors(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.ACTORS)));
