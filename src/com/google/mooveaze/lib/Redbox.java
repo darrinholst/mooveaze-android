@@ -19,6 +19,21 @@ public class Redbox {
         return instance;
     }
 
+    public static Redbox get20Instance() {
+        Redbox redbox = getInstance();
+
+        for(int i = 0; i < 5 && !redbox.is20(); i++) {
+            instance = null;
+            redbox = getInstance();
+        }
+
+        return redbox;
+    }
+
+    private boolean is20() {
+        return api.is20();
+    }
+
     private Redbox() {
         RestClient client = new RestClient();
         RestClient.Response response = client.get("http://www.redbox.com");
@@ -49,5 +64,9 @@ public class Redbox {
 
     public void addMovieDetails(Movie movie) {
         api.addMovieDetails(movie);
+    }
+
+    public List<Movie> getAllMovies() {
+        return api.getAllMovies();
     }
 }

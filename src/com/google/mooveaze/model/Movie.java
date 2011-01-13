@@ -2,6 +2,7 @@ package com.google.mooveaze.model;
 
 import android.database.Cursor;
 import com.google.mooveaze.model.repositories.MovieRepository;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -21,7 +22,7 @@ public class Movie extends Title {
     private String description;
     private String runningTime;
 
-    public static Movie fromJson(JSONObject json) throws Exception {
+    public static Movie fromJson(JSONObject json) throws JSONException {
         Movie movie = new Movie();
         movie.setId(json.getInt("ID"));
         movie.setName(json.getString("name"));
@@ -47,10 +48,6 @@ public class Movie extends Title {
         movie.setRunningTime(cursor.getString(cursor.getColumnIndex(MovieRepository.Columns.RUNNING_TIME)));
 
         return movie;
-    }
-
-    public boolean isMovie() {
-        return true;
     }
 
     public void setId(int id) {

@@ -1,32 +1,20 @@
 package com.google.mooveaze.lib;
 
 import android.os.AsyncTask;
-import com.google.mooveaze.model.Genre;
 import com.google.mooveaze.model.GenreMapping;
 import com.google.mooveaze.model.Movie;
-import com.google.mooveaze.model.TitleFactory;
 import com.google.mooveaze.model.repositories.GenreMappingRepository;
-import com.google.mooveaze.model.repositories.GenreRepository;
 import com.google.mooveaze.model.repositories.MovieRepository;
-import org.json.JSONArray;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class SyncTask extends AsyncTask<Void, Integer, Integer> {
-    private static final String TITLES_URL = "http://reboxed.semicolonapps.com/fumullins.js";
-
     protected Integer doInBackground(Void... voids) {
         try {
-            Log.debug("retrieving titles from " + TITLES_URL);
-            RestClient.Response response = new RestClient().get(TITLES_URL);
-            Log.debug("Status code is " + response.statusCode);
-
-            if(response.statusCode == 200) {
-                JSONArray titles = convertToJson(response.entity);
-                Log.debug("found " + titles.length() + " total titles");
-                return addMovies(titles);
-            }
+            Redbox redbox = Redbox.get20Instance();
+            List<Movie> movies = redbox.getAllMovies();
+            Log.debug("found " + movies.size() + " total titles");
+            return addMovies(movies);
         }
         catch(Exception e) {
             Log.error(e);
@@ -35,46 +23,28 @@ public class SyncTask extends AsyncTask<Void, Integer, Integer> {
         return 0;
     }
 
-    private int addMovies(JSONArray titles) {
-        TitleFactory factory = new TitleFactory();
+    private int addMovies(List<Movie> movies) {
         MovieRepository movieRepository = new MovieRepository();
         GenreMappingRepository genreMappingRepository = new GenreMappingRepository();
 
         int moviesAdded = 0;
 
-        for(int i = 0; i < titles.length(); i++) {
-            try {
-                Movie movie = (Movie) factory.fromJson(titles.getJSONObject(i));
+        for(Movie movie : movies) {
+            if(movieRepository.contains(movie)) {
+                break; //all the rest should already be there
+            }
 
-                if(movie != null && movie.getReleaseDays() >= 0 && !movieRepository.contains(movie)) {
-                    movieRepository.add(movie);
+            if(movie.getReleaseDays() >= -14) {
+                movieRepository.add(movie);
 
-                    for(Integer genreId : movie.getGenresIds()) {
-                        genreMappingRepository.add(new GenreMapping(genreId, movie.getId()));
-                    }
-
-                    moviesAdded += 1;
+                for(Integer genreId : movie.getGenresIds()) {
+                    genreMappingRepository.add(new GenreMapping(genreId, movie.getId()));
                 }
-            }
-            catch(ClassCastException e) {
-                //not a movie I guess
-            }
-            catch(Exception e) {
-                Log.error(e);
+
+                moviesAdded += 1;
             }
         }
 
         return moviesAdded;
-    }
-
-    private JSONArray convertToJson(String js) throws Exception {
-        Pattern pattern = Pattern.compile(".*= *(\\[.*\\]).*", Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(js);
-
-        if(matcher.matches()) {
-            return new JSONArray(matcher.group(1));
-        }
-
-        return new JSONArray();
     }
 }

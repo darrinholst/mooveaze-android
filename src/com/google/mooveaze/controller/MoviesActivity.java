@@ -3,38 +3,53 @@ package com.google.mooveaze.controller;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.mooveaze.R;
 import com.google.mooveaze.lib.Log;
-import com.google.mooveaze.lib.Redbox;
 import com.google.mooveaze.lib.SyncTask;
 import com.google.mooveaze.model.repositories.MovieRepository;
 import com.google.mooveaze.view.MovieBinder;
 
 public class MoviesActivity extends ListActivity implements AdapterView.OnItemClickListener {
+    private static final String PREFERENCES = "Mooveaze";
+    private static final long SYNC_INTERVAL = 8 * 60 * 60 * 1000;
+    private static final String LAST_SYNC = "last-sync";
+
     private ProgressDialog progress;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(false) {
-            progress = ProgressDialog.show(this, "", "Initial movie sync in progress. Please wait...", true, false);
+        final SharedPreferences preferences = getSharedPreferences(PREFERENCES, 0);
+        long lastSyncTime = preferences.getLong(LAST_SYNC, 0);
+
+        if(System.currentTimeMillis() - lastSyncTime > SYNC_INTERVAL) {
+            if(lastSyncTime == 0) {
+                progress = ProgressDialog.show(this, "", "Initial movie sync in progress. Please wait...", true, false);
+            }
 
             new SyncTask() {
                 protected void onPostExecute(Integer integer) {
-                    progress.cancel();
-                    showMovies();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong(LAST_SYNC, System.currentTimeMillis());
+                    editor.commit();
+
+                    if(progress != null) {
+                        progress.cancel();
+                        showMovies();
+                    }
                 }
             }.execute();
+
         }
-        else {
+
+        if(progress == null) {
             showMovies();
         }
     }
@@ -42,7 +57,6 @@ public class MoviesActivity extends ListActivity implements AdapterView.OnItemCl
     private void showMovies() {
         setContentView(R.layout.movies);
         Cursor cursor = new MovieRepository().all();
-        Log.debug(cursor.toString());
         startManagingCursor(cursor);
 
         String[] columns = new String[]{

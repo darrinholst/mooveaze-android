@@ -25,7 +25,10 @@ public class Redbox1Api extends RedboxApi {
                 new RestClient.Header("X-Requested-With", "XMLHttpRequest"),
                 new RestClient.Header("Content-Type", "application/json")
         };
+    }
 
+    public List<Movie> getAllMovies() {
+        return new ArrayList<Movie>(); //should only be called for api 2
     }
 
     public void addMovieDetails(Movie movie) {

@@ -23,6 +23,12 @@ public abstract class RedboxApi {
 
     protected abstract RestClient.Header[] getPostHeaders();
 
+    protected String get(String endpoint) {
+        Log.debug("Getting " + endpoint);
+        RestClient.Response response = client.get(endpoint);
+        return processResponse(response);
+    }
+
     protected JSONObject post(String endpoint, JSONObject entity) {
         try {
             return new JSONObject(rawPost(endpoint, entity));
@@ -36,7 +42,10 @@ public abstract class RedboxApi {
     protected String rawPost(String endpoint, JSONObject entity) {
         Log.debug("Posting to " + endpoint);
         RestClient.Response response = client.post(endpoint, entity.toString(), getPostHeaders());
+        return processResponse(response);
+    }
 
+    private String processResponse(RestClient.Response response) {
         if(response.statusCode == 200) {
             Log.debug(response.entity);
             return response.entity;
@@ -58,4 +67,10 @@ public abstract class RedboxApi {
 
         return sb.toString();
     }
+
+    public boolean is20() {
+        return false;
+    };
+
+    public abstract List<Movie> getAllMovies();
 }

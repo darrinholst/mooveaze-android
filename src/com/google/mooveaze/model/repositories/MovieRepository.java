@@ -52,7 +52,12 @@ public class MovieRepository extends BaseRepository {
     }
 
     public Cursor all() {
-        return database.rawQuery("select * from " + TABLE_NAME + " order by " + Columns.RELEASED + " desc limit 50", new String[0]);
+        return database.rawQuery("" +
+                " select * " +
+                " from " + TABLE_NAME +
+                " where " + Columns.RELEASED + " < " + System.currentTimeMillis() +
+                " order by " + Columns.RELEASED + " desc " +
+                " limit 50", new String[0]);
     }
 
     public Movie get(String movieId) {
