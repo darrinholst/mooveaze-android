@@ -36,6 +36,7 @@ public class MoviesActivity extends ListActivity implements AdapterView.OnItemCl
 
             new SyncTask() {
                 protected void onPostExecute(Integer integer) {
+                    Log.debug("SYNC COMPLETE!");
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(LAST_SYNC, System.currentTimeMillis());
                     editor.commit();

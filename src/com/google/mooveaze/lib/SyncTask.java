@@ -30,18 +30,20 @@ public class SyncTask extends AsyncTask<Void, Integer, Integer> {
         int moviesAdded = 0;
 
         for(Movie movie : movies) {
-            if(movieRepository.contains(movie)) {
-                break; //all the rest should already be there
-            }
 
             if(movie.getReleaseDays() >= -14) {
-                movieRepository.add(movie);
-
-                for(Integer genreId : movie.getGenresIds()) {
-                    genreMappingRepository.add(new GenreMapping(genreId, movie.getId()));
+                if(movieRepository.contains(movie)) {
+                    break; //all the rest should already be there
                 }
+                else {
+                    movieRepository.add(movie);
 
-                moviesAdded += 1;
+                    for(Integer genreId : movie.getGenresIds()) {
+                        genreMappingRepository.add(new GenreMapping(genreId, movie.getId()));
+                    }
+
+                    moviesAdded += 1;
+                }
             }
         }
 

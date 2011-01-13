@@ -11,8 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Database extends SQLiteOpenHelper {
-    private static String DB_PATH = "/data/data/com.google.mooveaze/databases/";
-    private static String DB_NAME = "mooveaze_pp";
+    private static final String DB_PATH = "/data/data/com.google.mooveaze/databases/";
+    private static final int DB_VERSION = 0;
+    private static final String DB_NAME = "mooveaze_" + DB_VERSION;
 
     private SQLiteDatabase theDatabase;
     private static Database instance;
