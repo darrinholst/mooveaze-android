@@ -12,4 +12,8 @@ public class TitleFactory {
             return new Title();
         }
     }
+
+    public Title fromOldJson(JSONObject json) throws JSONException {
+        return Movie.fromOldJson(json);
+    }
 }

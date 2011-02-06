@@ -2,6 +2,7 @@ package com.google.mooveaze.lib;
 
 import com.google.mooveaze.model.Kiosk;
 import com.google.mooveaze.model.Movie;
+import com.google.mooveaze.model.TitleFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 public class Redbox1Api extends RedboxApi {
     private static final String MOVIE_DETAILS_URL = "http://www.redbox.com/data.svc/Title";
     private static final String LOCATE_KIOSKS_URL = "http://www.redbox.com/ajax.svc/Kiosk/GetNearbyKiosks/";
+    private static final String TITLES_URL = "http://www.redbox.com/data.svc/Title/js";
 
     public Redbox1Api(RestClient client, String key) {
         super(client, key);
@@ -28,7 +30,37 @@ public class Redbox1Api extends RedboxApi {
     }
 
     public List<Movie> getAllMovies() {
-        return new ArrayList<Movie>(); //should only be called for api 2
+        String titles = get(TITLES_URL);
+        return parseGetAllMovies(titles);
+    }
+
+    private List<Movie> parseGetAllMovies(String js) {
+        TitleFactory titleFactory = new TitleFactory();
+        Pattern pattern = Pattern.compile(".*= *(\\[.*\\]).*", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(js);
+        JSONArray jsonMovies = new JSONArray();
+        List<Movie> movies = new ArrayList<Movie>();
+
+        try {
+            if(matcher.matches()) {
+                jsonMovies = new JSONArray(matcher.group(1));
+            }
+
+            for(int i = 0; i < jsonMovies.length(); i++) {
+                try {
+                    Movie movie = (Movie) titleFactory.fromOldJson(jsonMovies.getJSONObject(i));
+                    movies.add(movie);
+                }
+                catch(ClassCastException e) {
+                    //not a movie
+                }
+            }
+        }
+        catch(JSONException e) {
+            Log.error(e);
+        }
+
+        return movies;
     }
 
     public void addMovieDetails(Movie movie) {

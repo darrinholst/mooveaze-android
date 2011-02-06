@@ -35,6 +35,19 @@ public class Movie extends Title {
         return movie;
     }
 
+    public static Title fromOldJson(JSONObject json) throws JSONException {
+        Movie movie = new Movie();
+        movie.setId(json.getInt("ID"));
+        movie.setName(json.getString("Name"));
+        movie.setGenresIds(idsFrom(json.getJSONArray("GenreIDs")));
+        movie.setReleased(parseDate(json.getString("Release")));
+        movie.setImage(json.getString("Img"));
+        movie.setFormat(json.getString("FormatID"));
+        movie.setReleaseDays(0);
+//        movie.setRating(json.getString("rating"));
+        return movie;
+    }
+
     public static Movie fromCursor(Cursor cursor) throws Exception {
         Movie movie = new Movie();
 
